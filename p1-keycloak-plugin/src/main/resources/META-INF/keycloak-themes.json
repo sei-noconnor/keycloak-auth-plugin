@@ -7,6 +7,14 @@
         "account",
         "login"
       ]
+    },
+    {
+      "name": "crucible",
+      "types": [
+        "admin",
+        "account",
+        "login"
+      ]
     }
   ]
 }
