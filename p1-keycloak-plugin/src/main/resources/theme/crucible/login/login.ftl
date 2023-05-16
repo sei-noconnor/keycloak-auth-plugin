@@ -38,7 +38,7 @@
         </#if>
 
         <div class="footer-text">
-            No account? <a href="/register">Click here</a> to register now.<br>
+            No account? <a href="${url.registrationUrl}">Click here</a> to register now.<br>
             Need additional help? <a href="https://sso-info.il2.dso.mil/" target="_blank">Click here</a> or <a
                     id="helpdesk" href="mailto:help@dsop.io">email us</a>
         </div>
@@ -52,7 +52,7 @@
         feedback.outerHTML = [
             '<div class="alert alert-info cac-info">',
             '<h2>New DoD PKI Detected</h2>',
-            '<div style="line-height: 2rem;">If you do not have an account yet, <a href="/register">click to register</a> now.  Otherwise, please login with your username/password to associate this CAC with your existing account.',
+            '<div style="line-height: 2rem;">If you do not have an account yet, <a href="${url.registrationUrl}">click to register</a> now.  Otherwise, please login with your username/password to associate this CAC with your existing account.',
             '</div></div>'
         ].join('');
     }
