@@ -11,3 +11,5 @@ target
 
 # scan
 .scannerwork
+# act
+.github/workflows/act.secrets

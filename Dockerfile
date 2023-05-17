@@ -1,8 +1,15 @@
-ARG BASE_REGISTRY=registry1.dso.mil/ironbank
-ARG BASE_IMAGE=redhat/ubi/ubi8-micro
+# syntax=docker/dockerfile:1.4
+ARG BASE_IMAGE=redhat/ubi8-micro
 ARG BASE_TAG=8.7
+FROM gradle:7.4.2-jdk11 AS build
+#FROM registry1.dso.mil/ironbank/opensource/gradle/gradle-jdk11:7.4.2 AS build
+USER root
+VOLUME /app
+WORKDIR /app
+COPY . .
+RUN ./gradlew clean --build-cache assemble 
 
-FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
+FROM ${BASE_IMAGE}:${BASE_TAG} AS docker
 
 WORKDIR /app
 
@@ -12,9 +19,10 @@ RUN echo "bigbang:x:1000:1000::/home/bigbang:/sbin/nologin" >> /etc/passwd \
     && chmod 0750 /home/bigbang \
     && chown 1000:1000 /home/bigbang
 
-COPY build/libs/p1-keycloak-plugin-*.jar /app/p1-keycloak-plugin.jar
+COPY --from=build --link /app/build/libs/p1-keycloak-plugin-*.jar /app/p1-keycloak-plugin.jar
+#COPY build/libs/p1-keycloak-plugin-*.jar /app/p1-keycloak-plugin.jar
 
-RUN chmod +rx p1-keycloak-plugin.jar
+RUN chmod +rx *.jar
 
 USER 1000:1000
 
