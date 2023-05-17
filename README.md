@@ -22,7 +22,7 @@ cd /app
 ```
 once the build is done you'll have a JAR file in `./build/libs` directory and we'll want to symlink this folder into our `development/plugin` folder 
 ```
-ln -s ./build/libs/* ./development/plugin
+ln -s ${PWD}/build/libs/* ./development/plugin
 ```
 you'll want to symlink the theme your developing. within the `p1-keycloak-plugin/src/main/resources/theme` directory for example if you want to develop the crucible theme you would create a symlink as follows
 ```
