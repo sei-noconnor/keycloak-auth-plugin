@@ -106,7 +106,8 @@ public class RequireGroupAuthenticator implements Authenticator {
         RealmModel realm = context.getRealm();
         // Reset X509 attribute per login event
         user.setSingleAttribute(CommonConfig.getInstance(realm).getUserActive509Attribute(), "");
-        user.addRequiredAction("terms_and_conditions");
+        //TODO: Check if terms and conditions attribute exists first
+        //user.addRequiredAction("terms_and_conditions");
         context.success();
     }
 
