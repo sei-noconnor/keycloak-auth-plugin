@@ -1,0 +1,62 @@
+version: v2beta1
+name: keycloak-auth-plugin
+
+pipelines:
+  # You can run this pipeline via `devspace deploy` (or `devspace run-pipeline deploy`)
+  deploy:
+    run: |-
+      run_dependencies --all                            # 1. Deploy any projects this project needs (see "dependencies")
+      ensure_pull_secrets --all                         # 2. Ensure pull secrets
+      run_pipelines deploy-ordered
+      # build_images --all -t $(git describe --always)    # 3. Build, tag (git commit hash) and push all images (see "images")
+      # create_deployments --all                          # 4. Deploy Helm charts and manifests specfied as "deployments"
+  # This is the pipeline for the main command: `devspace dev` (or `devspace run-pipeline dev`)
+  dev:
+    run: |-
+      run_dependencies --all       # 1. Deploy any projects this project needs (see "dependencies")
+      ensure_pull_secrets --all    # 2. Ensure pull secrets
+      create_deployments --all     # 3. Deploy Helm charts and manifests specfied as "deployments"
+      start_dev keycloak-auth-plugin                # 4. Start dev mode "app" (see "dev" section)
+  
+dependencies:
+  crucible-common:
+    git: https://github.com/sei-noconnor/crucible-common-devspace.git
+    branch: main
+    overwriteVars: true
+
+
+dev:
+  keycloak-auth-plugin:
+    imageSelector: docker.io/bitnami/keycloak:21.0.2-debian-11-r0
+    container: keycloak
+    env:
+    - name: KEYCLOAK_PRODUCTION
+      value: "false"
+    
+    sync:
+      - path: "${DEVSPACE_WORKING_DIR}/development/theme-live-dev/theme/p1-sso-live-dev:/opt/bitnami/keycloak/themes/p1-sso-live-dev"
+        waitInitialSync: true
+        disableDownload: true
+
+vars:
+  DEVSPACE_WORKING_DIR: $(echo "$PWD")
+  DOMAIN: "crucible.dev"
+  ADMIN_PASS: "P@ssw0rd1!"
+  POSTGRES_SERVER: postgres-postgresql.default.svc.cluster.local
+  POSTGRES_USER: postgres
+  POSTGRES_PASS: postgres
+  INGRESS_NAMESPACE: ingress-nginx
+  OAUTH_PROVIDER: keycloak
+  OAUTH_AUTHORITY_URL: realms/crucible
+    
+
+commands:
+  start: |
+    devspace enter -- bash -c '
+      # Remove old .jar files
+      rm -f target/*.jar
+
+      # Build jar file
+      gradle build
+
+      java -jar target/*.jar'
