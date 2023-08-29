@@ -21,7 +21,7 @@ services:
     depends_on:
       - postgresql
 
-    image: 'registry1.dso.mil/ironbank/opensource/keycloak/keycloak:21.0.2'
+    image: 'bitnami/keycloak:21.0.2'
 
     networks:
       - keycloak-tier

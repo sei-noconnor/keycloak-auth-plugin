@@ -3,7 +3,6 @@
     <#if section = "form">
         <#if realm.password>
             <form onsubmit="login.disabled=true;return true;" action="${url.loginAction}" method="post">
-                
                 <div class="form-group">
                     <label class="form-label" for="username">
                         <#if !realm.loginWithEmailAllowed>${msg("username")}
@@ -13,7 +12,6 @@
                     <input tabindex="1" id="username" class="form-control " name="username"
                             value="${(login.username!'')}" type="text" autofocus autocomplete="off"/>
                 </div>
-
                 <div class="form-group">
                     <label for="password" class="form-label">${msg("password")}</label>
                     <input tabindex="2" id="password" class="form-control " name="password"

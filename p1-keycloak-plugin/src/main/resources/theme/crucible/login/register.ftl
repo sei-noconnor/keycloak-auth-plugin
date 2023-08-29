@@ -65,6 +65,7 @@
                             <option>Dept of Defense</option>
                             <option>Federal Government</option>
                             <option>Other</option>
+                            <option>Nic Option</option>
                         </optgroup>
 
                         <optgroup label="Contractor">
