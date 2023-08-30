@@ -25,7 +25,7 @@
     </#if>
 </head>
 <body class="admin-console user ${bodyClass}">
-        
+    
     <nav class="navbar navbar-expand-md fixed-top bg-dark">
         <div class="container-fluid">
             <div class="upper-logo"><img src="${url.resourcesPath}/img/crucible-logo-light.png" /></div>
@@ -33,6 +33,7 @@
             <div class="collapse navbar-collapse flex-column align-items-start ml-lg-2 ml-0" id="navbarCollapse">
                 <ul class="navbar-nav mb-auto mt-0 ml-auto">
                     <li class="nav-item <#if active=='account'>active</#if>"><a class="nav-link" href="${url.accountUrl}">${msg("account")}</a></li>
+                    <li class="nav-item <#if active=='admin'>active</#if>"><a target="_blank" class="nav-link" href="${url.accountUrl}/admin">${msg("admin")}</a></li>
                     <#if features.passwordUpdateSupported><li class="nav-item <#if active=='password'>active</#if>"><a class="nav-link" href="${url.passwordUrl}">${msg("password")}</a></li></#if>
                     <li class="nav-item <#if active=='totp'>active</#if>"><a class="nav-link" href="${url.totpUrl}">${msg("authenticator")}</a></li>
                     <#if features.identityFederation><li class="nav-item <#if active=='social'>active</#if>"><a class="nav-link" href="${url.socialUrl}">${msg("federatedIdentity")}</a></li></#if>

@@ -10,17 +10,54 @@ docker buildx build -t <YOUR REGISTRY>/<IMAGE>:<TAG> .
 docker push <YOUR REGISTRY>/<IMAGE>:<TAG> .
 ```
 
-## Developing the plugin.
-In order to provide a development environment, in which changes can be made quickly, we have updated this repo to combine docker-compose files from supporting repos [P1 keycloak](https://repo1.dso.mil/big-bang/product/packages/keycloak.git)
+## Quickstart - DevSpace
+### Requirements
+- `Docker Desktop` Docker Engine should suffice
 
-### Quickstart - Build the plugin 
+its best to install [brew](https://brew.sh) on your os and install the dependencies through brew. 
+- `kubectl`
+- `kind`
+- `yq`
+- `devspace-cli`
+- `openssl`
+
+### Bootstrap 
+1. `devspace run crucible-common.prep` - Creates SSL certificates
+1. `devspace run crucible-common.bootstrap` - initializes the Kind cluster
+
+This will bootstrap a kind cluster named `crucible (kind-crucible)` with an nginx ingress.
+
+### Import the SSL root-ca 
+you will need to find instructions on how to import certificates based on your OS, on linux certificates are managed by the browsers. 
+
+```bash
+  cp ~/.devspace/dependencies/https-github-com-sei-noconnor-crucible-common-devspace-git-main/development/ssl/root-ca.pem ${DEVSPACE_WORKING_DIR}
+```
+
+### Development
+currently this repo is only supporting theme development and not java development
+
+1. `devspace dev`
+1. start editing files in the `./development/plugin/live-theme-dev/theme/p1-sso-live-dev`
+1. saving the files will automatically sync the theme, changes can be seen in realtime with a refresh
+
+### Building plugin image
+1. `devspace build`
+2. `docker push <registry>/<image>:<tag>`
+
+### Cleanup 
+To destroy the cluster and your development environment run 
+`devspace run crucible-common.clean`
+
+
+## Quickstart - Docker
 First we need to build the plugin from source. 
 ```
 docker run -it --rm -v $(pwd):/app gradle:7.4.2-jdk11 bash
 cd /app
 ./gradlew clean --build-cache assemble
 ```
-once the build is done you'll have a JAR file in `./build/libs` directory and we'll want to symlink this folder into our `development/plugin` folder 
+once the build is done you'll have a JAR file in `./build/libs` directory and we'll want to copy this file into our `development/plugin` folder 
 ```
 ln -s ${PWD}/build/libs/* ./development/plugin
 ```
@@ -35,7 +72,10 @@ docker compose up -d
 docker logs -f keycloak
 ```
 
-Any changes made to the theme will be instantly updated. 
+Any changes made to the theme will be updated in real time
+
+
+
 
 # Keycloak P1 Auth Plugin
 Repository for the Platform One Keycloak Plugin. This plugin has passed scans in the Party Bus IL2 MissionDevOps pipeline. The Keycloak plugin has custom themes and authentication flows. The project also contains a custom quarkus extension for routing. This code is specific to the Platform One SSO deployment because it has some hard-coded email and web links in the theme that point to *.dsop.mil and *.dso.mil among other P1 branding. Keycloak is configurable to use your own theme. See the [Big Bang Keycloak repo documentation](https://repo1.dso.mil/big-bang/product/packages/keycloak/-/blob/main/development/README.md) for guidance on how to build and use your own custom theme with Keycloak.

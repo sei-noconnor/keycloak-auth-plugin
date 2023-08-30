@@ -26,10 +26,11 @@ The plugin can be tested locally and in a k8s environment. See instructions here
 Follow instructions in the P1 Keycloak package repo for how to do plugin development with a local [docker compse](https://repo1.dso.mil/big-bang/product/packages/keycloak/-/tree/main/development) environment.
 
 ## Local Quarkus Extension development environment
-There is a custom Quarkus extension for routing and redirects packaged inside this repo. Maven commands can be used to launch a local development environment. Then you can test in your browser at `http://localhost:9005`.
-    ```bash
+There is a custom Quarkus extension for routing and redirects packaged inside this repo. Maven commands can be used to launch a local development environment. Then you can test in your browser at `http://localhost:9005`
+
+```bash
     mvn clean install -f quarkus-ext-routing/runtime && mvn clean compile -f quarkus-ext-routing/deployment quarkus:dev -Dquarkus.enforceBuildGoal=false -Dquarkus.profile=quarkusdev
-    ```
+```
 If you get "Non-resolvable parent POM" errors when running mvn commands your local cache needs to be cleared by running
     ```bash
     mvn clean install -N
