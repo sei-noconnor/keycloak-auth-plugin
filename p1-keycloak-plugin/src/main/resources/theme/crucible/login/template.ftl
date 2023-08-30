@@ -42,7 +42,7 @@
                             <#if client?? && client.description?has_content>
                                 <img src="${client.description}"/>
                             <#else>
-                                <img src="${url.resourcesPath}/img/p1-logo.png"/>
+                                <img src="${url.resourcesPath}/img/crucible-logo-light.png"/>
                             </#if>
                         </div>
                         <div class="col-sm-1">&nbsp;</div>
