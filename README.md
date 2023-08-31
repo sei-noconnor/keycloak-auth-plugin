@@ -22,17 +22,17 @@ its best to install [brew](https://brew.sh) on your os and install the dependenc
 - `openssl`
 
 ### Bootstrap 
-1. `devspace run crucible-common.prep` - Creates SSL certificates
-1. `devspace run crucible-common.bootstrap` - initializes the Kind cluster
+1. `devspace run prep` - Creates SSL certificates
+1. `devspace run bootstrap` - initializes the Kind cluster
 
 This will bootstrap a kind cluster named `crucible (kind-crucible)` with an nginx ingress.
 
-### Import the SSL root-ca 
-you will need to find instructions on how to import certificates based on your OS, on linux certificates are managed by the browsers. 
+> **_Note:_** you may need to create a dummy kind cluster to run the initial commands `kind create cluster -n dummy` devspace needs an existing kubectl context in order to run the `prep` and `bootstrap` commands. Cleanup the cluster with `kind delete cluster -n dummy` once you've run the `prep` and `bootstrap` commands
 
-```bash
-  cp ~/.devspace/dependencies/https-github-com-sei-noconnor-crucible-common-devspace-git-main/development/ssl/root-ca.pem ${DEVSPACE_WORKING_DIR}
-```
+
+
+### Import the SSL root-ca 
+you will need to find instructions on how to import certificates based on your OS, on linux certificates are managed by the browsers. When you run the prep script above. an `ssl` folder is created at the root of this repository import the `root-ca.pem` into your certificate store 
 
 ### Development
 currently this repo is only supporting theme development and not java development
@@ -73,6 +73,37 @@ docker logs -f keycloak
 ```
 
 Any changes made to the theme will be updated in real time
+
+## Deployment - Usage
+to use this plugin in a production keycloak instance. add an initContainer to the helm values 
+file this plugin is compatible with the bitnami/keycloak helm chart
+
+```yaml
+  - name: plugin
+    image: cmusei/keycloak-auth-plugin:<tag>
+    imagePullPolicy: Always
+    command:
+    - sh
+    - -c
+    - |
+      cp /app/p1-keycloak-plugin.jar /init
+      ls -l /init
+    volumeMounts:
+    - name: plugin
+      mountPath: "/init"
+```
+and add extra volumes and volume mounts 
+```yaml
+extraVolumes: |-
+  - name: plugin
+    emptyDir: {}
+```
+```yaml
+extraVolumeMounts: |-
+  - name: plugin
+    mountPath: /opt/bitnami/keycloak/providers/p1-keycloak-plugin.jar
+    subPath: p1-keycloak-plugin.jar
+```
 
 
 
