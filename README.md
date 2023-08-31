@@ -37,6 +37,7 @@ you will need to find instructions on how to import certificates based on your O
 ### Development
 currently this repo is only supporting theme development and not java development
 
+1. symlink the crucible folder to theme-live-dev `ln -s $PWD/p1-keycloak-plugin/src/main/resources/theme/crucible $PWD/development/theme-live-dev/theme/p1-sso-live-dev` 
 1. `devspace dev`
 1. start editing files in the `./development/plugin/live-theme-dev/theme/p1-sso-live-dev`
 1. saving the files will automatically sync the theme, changes can be seen in realtime with a refresh
