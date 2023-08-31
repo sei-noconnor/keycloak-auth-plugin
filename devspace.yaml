@@ -30,13 +30,14 @@ images:
     buildKit: {}
       
 dependencies:
-  # crucible-common:
-  #   git: https://github.com/sei-noconnor/crucible-common-devspace.git
-  #   branch: main
-  #   overwriteVars: true
   crucible-common:
-    path: ../crucible-devspace
+    git: https://github.com/sei-noconnor/crucible-common-devspace.git
+    branch: main
     overwriteVars: true
+  #### Local Dependency dev ###
+  # crucible-common:
+  #   path: ../crucible-devspace
+  #   overwriteVars: true
  
 dev:
   keycloak-auth-plugin:
