@@ -2,6 +2,9 @@ version: v2beta1
 name: keycloak-auth-plugin
 
 pipelines:
+  build:
+    run: |-
+      build_images --all
   # You can run this pipeline via `devspace deploy` (or `devspace run-pipeline deploy`)
   deploy:
     run: |-
@@ -17,19 +20,31 @@ pipelines:
       ensure_pull_secrets --all    # 2. Ensure pull secrets
       create_deployments --all     # 3. Deploy Helm charts and manifests specfied as "deployments"
       start_dev keycloak-auth-plugin                # 4. Start dev mode "app" (see "dev" section)
-  
+images:
+  keycloak-auth-plugin:
+    image: cmusei/keycloak-auth-plugin
+    tags:
+      - $(git rev-parse --abbrev-ref HEAD)
+    dockerfile: ./Dockerfile
+    context: .
+    buildKit: {}
+      
 dependencies:
+  # crucible-common:
+  #   git: https://github.com/sei-noconnor/crucible-common-devspace.git
+  #   branch: main
+  #   overwriteVars: true
   crucible-common:
-    git: https://github.com/sei-noconnor/crucible-common-devspace.git
-    branch: main
+    path: ../crucible-devspace
     overwriteVars: true
-
-
+ 
 dev:
   keycloak-auth-plugin:
     imageSelector: docker.io/bitnami/keycloak:21.0.2-debian-11-r0
     container: keycloak
     env:
+    - name: KEYCLOAK_EXTRA_ARGS
+      value: --spi-theme-welcome-theme=p1-sso-live-dev --spi-truststore-file-file=/opt/bitnami/keycloak/spi-certs/truststore.jks --spi-truststore-file-password=password --spi-truststore-file-hostname-verification-policy=ANY --spi-truststore-file-type=jks --spi-x509cert-lookup-provider=nginx --spi-x509cert-lookup-nginx-ssl-client-cert=ssl-client-cert --spi-x509cert-lookup-nginx-trust-proxy-verification=false --import-realm
     - name: KEYCLOAK_PRODUCTION
       value: "false"
     
@@ -51,12 +66,9 @@ vars:
     
 
 commands:
-  start: |
-    devspace enter -- bash -c '
-      # Remove old .jar files
-      rm -f target/*.jar
-
-      # Build jar file
-      gradle build
-
-      java -jar target/*.jar'
+  prep:
+    devspace run crucible-common.prep
+  bootstrap:
+    devspace run crucible-common.bootstrap
+  clean:
+    devspace run crucible-common.clean

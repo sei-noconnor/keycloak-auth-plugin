@@ -23,7 +23,7 @@
             <div class="row">
                 <div class="col-lg-6 form-group ${messagesPerField.printIfExists('firstName','has-error')}">
                     <label for="firstName" class="form-label">${msg("firstName")}</label>
-                    <input readonly type="text" id="firstName" class="form-control" name="firstName"
+                    <input <#if cacIdentity??> readonly </#if> type="text" id="firstName" class="form-control" name="firstName"
                            value="${(register.formData.firstName!'')}"/>
                     <#if messagesPerField.existsError('firstName')>
                         <span class="message-details" aria-live="polite">${kcSanitize(messagesPerField.get('firstName'))?no_esc}</span>
@@ -32,7 +32,7 @@
 
                 <div class="col-lg-6 form-group ${messagesPerField.printIfExists('lastName','has-error')}">
                     <label for="lastName" class="form-label">${msg("lastName")}</label>
-                    <input readonly type="text" id="lastName" class="form-control" name="lastName"
+                    <input <#if cacIdentity??> readonly </#if> type="text" id="lastName" class="form-control" name="lastName"
                             value="${(register.formData.lastName!'')}"/>
                     <#if messagesPerField.existsError('lastName')>
                         <span class="message-details" aria-live="polite">${kcSanitize(messagesPerField.get('lastName'))?no_esc}</span>
@@ -41,11 +41,11 @@
 
             </div>
 
-            <div class="row">
+            <div class="row" <#if cacIdentity??>style="display: none;"</#if>>
 
                 <div class="col-lg-6 form-group ${messagesPerField.printIfExists('user.attributes.affiliation','has-error')}">
                     <label for="user.attributes.affiliation" class="form-label">Affiliation</label>
-                    <select readonly id="user.attributes.affiliation" name="user.attributes.affiliation" class="form-control">
+                    <select <#if cacIdentity??> readonly </#if> id="user.attributes.affiliation" name="user.attributes.affiliation" class="form-control">
                       <option selected>FFRDC</option>
                     </select>
                     <#if messagesPerField.existsError('user.attributes.affiliation')>
@@ -55,7 +55,7 @@
 
                 <div class="col-lg-6 form-group ${messagesPerField.printIfExists('user.attributes.rank','has-error')}">
                     <label for="user.attributes.rank" class="form-label">Pay Grade</label>
-                    <select readonly id="user.attributes.rank" name="user.attributes.rank" class="form-control">
+                    <select <#if cacIdentity??> readonly </#if> id="user.attributes.rank" name="user.attributes.rank" class="form-control">
                         <option value="N/A" selected>N/A</option>
                     </select>
                     <#if messagesPerField.existsError('user.attributes.rank')>
@@ -65,9 +65,9 @@
 
             </div>
 
-            <div class="form-group ${messagesPerField.printIfExists('user.attributes.organization','has-error')}">
+            <div class="form-group ${messagesPerField.printIfExists('user.attributes.organization','has-error')}" <#if cacIdentity??>style="display: none;"</#if>>
                 <label for="user.attributes.organization" class="form-label">Unit, Organization or Company Name</label>
-                <input readonly id="user.attributes.organization" class="form-control" name="user.attributes.organization" type="text"
+                <input <#if cacIdentity??> readonly </#if> id="user.attributes.organization" class="form-control" name="user.attributes.organization" type="text"
                         value="${(register.formData['user.attributes.organization']!'SEI')}" autocomplete="company"/>
                 <#if messagesPerField.existsError('user.attributes.organization')>
                     <span class="message-details" aria-live="polite">${kcSanitize(messagesPerField.get('user.attributes.organization'))?no_esc}</span>
@@ -99,15 +99,16 @@
                     <span class="message-details" aria-live="polite">${kcSanitize(messagesPerField.get('email'))?no_esc}</span>
                 </#if>                    
             </div>
-            <!--
+            <#if !cacIdentity??>
             <div class="form-group ${messagesPerField.printIfExists('notes','has-error')}">
                 <label for="user.attributes.notes" class="form-label ">${msg("accessRequest")}</label>
                 <textarea id="user.attributes.notes" class="form-control " name="user.attributes.notes"></textarea>
             </div>                       
-            -->
-            <div class="form-group ${messagesPerField.printIfExists('password','has-error')}">
+            </#if>
+            
+            <div class="form-group ${messagesPerField.printIfExists('password','has-error')}" <#if cacIdentity??> style="display: none;" </#if>>
                 <#if cacIdentity??>
-                    <div class="alert alert-info cac-info text-white">
+                    <div class="alert alert-info cac-info">
                         ${msg("passwordCacMessage1")}
                         <span class="note-important">${msg("passwordCacMessage2")}</span>
                         ${msg("passwordCacMessage3")}
@@ -122,8 +123,8 @@
                     <span class="message-details" aria-live="polite">${kcSanitize(messagesPerField.get('password'))?no_esc}</span>
                 </#if>                        
             </div>
-
-            <div class="form-group ${messagesPerField.printIfExists('password-confirm','has-error')}">
+            
+            <div class="form-group ${messagesPerField.printIfExists('password-confirm','has-error')}" <#if cacIdentity??> style="display: none;" </#if>>
                 <label for="password-confirm" class="form-label ">${msg("passwordConfirm")}</label>
                 <input id="password-confirm" class="form-control " name="password-confirm"
                         type="password" autocomplete="new-password"/>
@@ -131,7 +132,7 @@
                     <span class="message-details" aria-live="polite">${kcSanitize(messagesPerField.get('password-confirm'))?no_esc}</span>
                 </#if>                                                
             </div>
-                            
+            
             <#if recaptchaRequired??>
                 <div class="form-group">
                     <div>
@@ -169,17 +170,21 @@
         let count = 0;
         let complete = false;
         // Remove html encoded special characters
-        let safeCacIdentity = "${cacIdentity}".replace(/(.+)(&#.+;)/gi, '\$1')
+        <#if cacIdentity??>
+          let safeCacIdentity = "${cacIdentity}".replace(/(.+)(&#.+;)/gi, '\$1');
+          let lastName = safeCacIdentity.split('.')[0];
+          let firstName = safeCacIdentity.split('.')[1];
+          // Remove any special characters.
+          firstName = firstName.replace(/[^\w\s]/gi, '');
+          lastName = lastName.replace(/[^\w\s]/gi, '');
+          // Set form fields
+          document.getElementById('firstName').value = firstName;
+          document.getElementById('lastName').value = lastName;
+          if (!${(realm.registrationEmailAsUsername?c)}) {
+          document.getElementById('username').value = firstName + "." + lastName;
+        }
+        </#if>
         
-        let lastName = safeCacIdentity.split('.')[0];
-        let firstName = safeCacIdentity.split('.')[1];
-        // Remove any special characters.
-        firstName = firstName.replace(/[^\w\s]/gi, '');
-        lastName = lastName.replace(/[^\w\s]/gi, '');
-        // Set form fields
-        document.getElementById('firstName').value = firstName;
-        document.getElementById('lastName').value = lastName;
-        document.getElementById('username').value = firstName + "." + lastName;
         window.onload = tracker;
         window.onmousemove = tracker;
         window.onmousedown = tracker;
