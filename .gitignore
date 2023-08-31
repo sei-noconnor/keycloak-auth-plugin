@@ -9,6 +9,7 @@
 build
 **/bin
 target
+ssl
 
 # scan
 .scannerwork
