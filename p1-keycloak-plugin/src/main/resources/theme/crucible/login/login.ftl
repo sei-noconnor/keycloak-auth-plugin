@@ -34,12 +34,12 @@
 
             </form>
         </#if>
-
+        <!--
         <div class="footer-text">
             No account? <a href="${url.registrationUrl}">Click here</a> to register now.<br>
-            Need additional help? <a href="https://sso-info.il2.dso.mil/" target="_blank">Click here</a> or <a
-                    id="helpdesk" href="mailto:help@dsop.io">email us</a>
+            <a id="helpdesk" href="mailto:info@sei.cmu.edu">email us</a>
         </div>
+        -->
     </#if>
 
 </@layout.registrationLayout>

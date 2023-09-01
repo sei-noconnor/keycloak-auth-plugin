@@ -45,9 +45,9 @@
 
         <div class="row">
 
-            <div class="col-lg-6 form-group ${messagesPerField.printIfExists('user.attributes.affiliation','has-error')}">
+            <div class="col-lg-6 form-group ${messagesPerField.printIfExists('user.attributes.affiliation','has-error')}" <#if cacIdentity??> style="display: none" </#if>>
                 <label for="user.attributes.affiliation" class="form-label">Affiliation</label>
-                <select <#if cacIdentity??> readonly </#if> id="user.attributes.affiliation" name="user.attributes.affiliation" class="form-control">
+                <select id="user.attributes.affiliation" name="user.attributes.affiliation" class="form-control">
                     <option selected disabled hidden>Select your org</option>
                     <option>FFRDC</option>
                 </select>
@@ -56,9 +56,9 @@
                 </#if>
             </div>
 
-            <div class="col-lg-6 form-group ${messagesPerField.printIfExists('user.attributes.rank','has-error')}">
+            <div class="col-lg-6 form-group ${messagesPerField.printIfExists('user.attributes.rank','has-error')}" <#if cacIdentity??> style="display: none" </#if>>
                 <label for="user.attributes.rank" class="form-label">Pay Grade</label>
-                <select <#if cacIdentity??> readonly </#if> id="user.attributes.rank" name="user.attributes.rank" class="form-control">
+                <select id="user.attributes.rank" name="user.attributes.rank" class="form-control">
                     <option selected disabled hidden>Select your rank</option>
                     <option>N/A</option>
                 </select>
@@ -69,9 +69,9 @@
 
         </div>
 
-        <div class="form-group ${messagesPerField.printIfExists('user.attributes.organization','has-error')}">
+        <div class="form-group ${messagesPerField.printIfExists('user.attributes.organization','has-error')}" <#if cacIdentity??> style="display: none" </#if>>
             <label for="user.attributes.organization" class="form-label">Unit, Organization or Company Name</label>
-            <input <#if cacIdentity??> readonly </#if> id="user.attributes.organization" class="form-control" name="user.attributes.organization" type="text"
+            <input id="user.attributes.organization" class="form-control" name="user.attributes.organization" type="text"
                     value="${(account.attributes.organization!'')}" />
             <#if messagesPerField.existsError('user.attributes.organization')>
                 <span class="message-details" aria-live="polite">${kcSanitize(messagesPerField.get('user.attributes.organization'))?no_esc}</span>

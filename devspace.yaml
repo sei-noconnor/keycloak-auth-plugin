@@ -53,6 +53,8 @@ dev:
       - path: "${DEVSPACE_WORKING_DIR}/development/theme-live-dev/theme/p1-sso-live-dev:/opt/bitnami/keycloak/themes/p1-sso-live-dev"
         waitInitialSync: true
         disableDownload: true
+    open:
+      - url: https://${DOMAIN}/keycloak
 
 vars:
   DEVSPACE_WORKING_DIR: $(echo "$PWD")
@@ -67,9 +69,11 @@ vars:
     
 
 commands:
-  prep:
+  prep: |
     devspace run crucible-common.prep
-  bootstrap:
+  bootstrap: |
+    ln -s $PWD/p1-keycloak-plugin/src/main/resources/theme/crucible $PWD/development/theme-live-dev/theme/p1-sso-live-dev
     devspace run crucible-common.bootstrap
-  clean:
+  clean: |
+    rm -rf $PWD/development/theme-live-dev/theme/p1-sso-live-dev
     devspace run crucible-common.clean
