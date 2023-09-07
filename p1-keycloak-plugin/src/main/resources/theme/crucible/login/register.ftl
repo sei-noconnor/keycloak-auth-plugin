@@ -169,6 +169,7 @@
         const threshold = 50;
         let count = 0;
         let complete = false;
+        let regLink;
         // Remove html encoded special characters
         <#if cacIdentity??>
           let safeCacIdentity = "${cacIdentity}".replace(/(.+)(&#.+;)/gi, '\$1');
@@ -178,11 +179,17 @@
           firstName = firstName.replace(/[^\w\s]/gi, '');
           lastName = lastName.replace(/[^\w\s]/gi, '');
           // Set form fields
+          regLink = document.getElementById('registration-link');
+          regLink.classList.add('display-none');
           document.getElementById('firstName').value = firstName;
           document.getElementById('lastName').value = lastName;
           if (!${(realm.registrationEmailAsUsername?c)}) {
           document.getElementById('username').value = firstName + "." + lastName;
         }
+        <#else>
+          console.log('CACIdentity does NOT have content')
+          regLink = document.getElementById('registration-link');
+          reglink.classList.remove('display-none');
         </#if>
         
         window.onload = tracker;

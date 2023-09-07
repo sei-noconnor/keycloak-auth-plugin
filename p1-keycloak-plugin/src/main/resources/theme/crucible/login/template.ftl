@@ -40,8 +40,6 @@
                     <div class="card-header branding row">
                         <div class="col-sm-5 p-0">
                             <#if client?? && client.description?has_content>
-                                <img src="${client.description}"/>
-                            <#else>
                                 <img src="${url.resourcesPath}/img/crucible-logo-light.png"/>
                             </#if>
                         </div>
@@ -56,22 +54,25 @@
                     </div>
 
                     <br>
-
+                    
                     <div class="card-body">
                         <#-- App-initiated actions should not see warning messages about the need to complete the action -->
                         <#-- during login.                                                                               -->
                         <#if displayMessage && message?has_content && (message.type != 'warning' || !isAppInitiatedAction??)>
-                            <div id="alert-error" class="error-messages alert alert-${message.type} ${properties.kcAlertClass!} alert-<#if message.type = 'error'>danger<#else>${message.type}</#if>">
-                                <span class="${properties.kcAlertTitleClass!}">${kcSanitize(message.summary)?no_esc}</span>
-                            </div>
+                          <div id="alert-error" class="error-messages alert alert-${message.type} ${properties.kcAlertClass!} alert-<#if message.type = 'error'>danger<#else>${message.type}</#if>">
+                            <span class="${properties.kcAlertTitleClass!}">${kcSanitize(message.summary)?no_esc}</span>
+                          </div>    
                         </#if>
-
+                        <div id="registration-link" style="line-height: 2rem;">If you do not have an account yet, <a href="${url.registrationUrl}">click to register</a> now.</div>
+                        
                         <#nested "form">
-
+                        
                         <#if displayInfo>
                             <div id="kc-info" class="${properties.kcSignUpClass!}">
                                 <div id="kc-info-wrapper">
+                                    
                                     <#nested "info">
+                                    
                                 </div>
                             </div>
                         </#if>
