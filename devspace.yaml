@@ -72,7 +72,7 @@ commands:
   prep: |
     devspace run crucible-common.prep
   bootstrap: |
-    ln -s $PWD/p1-keycloak-plugin/src/main/resources/theme/crucible $PWD/development/theme-live-dev/theme/p1-sso-live-dev
+    ln -sf $PWD/p1-keycloak-plugin/src/main/resources/theme/crucible $PWD/development/theme-live-dev/theme/p1-sso-live-dev
     devspace run crucible-common.bootstrap
   clean: |
     rm -rf $PWD/development/theme-live-dev/theme/p1-sso-live-dev
