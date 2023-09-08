@@ -37,3 +37,28 @@
     </#if>
 
 </@layout.registrationLayout>
+<script>
+
+  (function () {
+    let regLink;
+    <#if cacIdentity??>
+      
+      regLink = document.getElementById('registration-link');
+      regLink.classList.add('display-none');
+    <#else>
+      console.log('CACIdentity does NOT have content')
+      regLink = document.getElementById('registration-link');
+      regLink.classList.add('display-none');
+    </#if>
+  }());
+  const feedback = document.getElementById('alert-error');
+  if (feedback && feedback.innerHTML.indexOf('X509 certificate') > -1 && feedback.innerHTML.indexOf('Invalid user') > -1) {
+      feedback.outerHTML = [
+          '<div class="alert alert-info cac-info">',
+          '<h2>New DoD PKI Detected</h2>',
+          '<div style="line-height: 2rem;">If you do not have an account yet, <a href="${url.registrationUrl}">click to register</a> now.  Otherwise, please login with your username/password to associate this CAC with your existing account.',
+          '</div></div>'
+      ].join('');
+  }
+
+</script>

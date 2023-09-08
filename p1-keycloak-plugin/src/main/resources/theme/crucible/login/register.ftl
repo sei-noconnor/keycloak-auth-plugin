@@ -1,6 +1,7 @@
 <#import "template.ftl" as layout>
 <@layout.registrationLayout displayMessage=!messagesPerField.existsError('firstName','lastName','email','username','password','password-confirm'); section>
     <#if section = "form">
+        <#if cacIdentity??>
         <form action="/chuck-norris-calendar-goes-straight-from-march-31st-to-april-2nd-because-no-one-fools-chuck-norris"
               id="baby-yoda-form" method="post">
 
@@ -8,15 +9,6 @@
                 <div class="alert alert-info cac-info">
                     <h2>DoD PKI User Registration</h2>
                     <p>${cacIdentity}</p>
-                </div>
-            <#else>
-                <div class="alert alert-info cac-info">
-                    <h2>Regular User Registration</h2>
-                    <p>Use your company or government email address as your access will be based off of your validated email address.</p>
-                    <p class="font-weight-bold">For assistance contact your team admin, <a
-                                href="https://sso-info.il2.dso.mil/" target="_blank">click here</a> or <a id="helpdesk"
-                                                                                                          href="mailto:help@dsop.io">email us</a>.
-                    </p>
                 </div>
             </#if>
 
@@ -149,7 +141,7 @@
                            type="submit" value="${msg("doRegister")}"/>
                 </div>
             </div>
-
+          
         </form>
 
         <div class="footer-text" id="footer-text">
@@ -157,7 +149,9 @@
             <br><br>
             <a>Currently only <span id="confidence">1</span>% convinced you're not a robot.</a>
         </div>
-
+      <#else>
+        <div>Registration is disabled, Please insert a CAC or softcert to register</div>
+      </#if>
     </#if>
 </@layout.registrationLayout>
 
@@ -189,7 +183,7 @@
         <#else>
           console.log('CACIdentity does NOT have content')
           regLink = document.getElementById('registration-link');
-          reglink.classList.remove('display-none');
+          regLink.classList.add('display-none');
         </#if>
         
         window.onload = tracker;
