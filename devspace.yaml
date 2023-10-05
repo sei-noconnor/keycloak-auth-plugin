@@ -30,11 +30,6 @@ images:
     buildKit: {}
       
 dependencies:
-  crucible-common:
-    git: https://github.com/sei-noconnor/crucible-common-devspace.git
-    branch: main
-    overwriteVars: true
-  #### Local Dependency dev ###
   # crucible-common:
   #   path: ../crucible-devspace
   #   overwriteVars: true
@@ -43,16 +38,33 @@ dev:
   keycloak-auth-plugin:
     imageSelector: docker.io/bitnami/keycloak:21.0.2-debian-11-r0
     container: keycloak
-    env:
+    ports:
+    - port: "8787:8787"
+    env: 
     - name: KEYCLOAK_EXTRA_ARGS
-      value: --spi-theme-welcome-theme=p1-sso-live-dev --spi-truststore-file-file=/opt/bitnami/keycloak/spi-certs/truststore.jks --spi-truststore-file-password=password --spi-truststore-file-hostname-verification-policy=ANY --spi-truststore-file-type=jks --spi-x509cert-lookup-provider=nginx --spi-x509cert-lookup-nginx-ssl-client-cert=ssl-client-cert --spi-x509cert-lookup-nginx-trust-proxy-verification=false --import-realm
+      value: --spi-theme-welcome-theme=p1-sso-live-dev --spi-truststore-file-file=/opt/bitnami/keycloak/spi-certs/truststore.jks --spi-truststore-file-password=password --spi-truststore-file-hostname-verification-policy=ANY --spi-truststore-file-type=jks --spi-x509cert-lookup-provider=nginx --spi-x509cert-lookup-nginx-ssl-client-cert=ssl-client-cert --spi-x509cert-lookup-nginx-trust-proxy-verification=false --import-realm --debug
     - name: KEYCLOAK_PRODUCTION
       value: "false"
+    - name: DEBUG_PORT
+      value: "*:8787"
+    - name: DEBUG_MODE
+      value: "true"
+    
+        
     
     sync:
       - path: "${DEVSPACE_WORKING_DIR}/development/theme-live-dev/theme/p1-sso-live-dev:/opt/bitnami/keycloak/themes/p1-sso-live-dev"
         waitInitialSync: true
         disableDownload: true
+        printLogs: true
+      - path: "${DEVSPACE_WORKING_DIR}/build/libs/p1-keycloak-plugin-3.2.0.jar:/opt/bitnami/keycloak/providers/p1-keycloak-plugin-3.2.0.jar"
+        disableDownload: true
+        file: true
+        printLogs: true
+        onUpload:
+          exec:
+            - command: |-
+                kc.sh build
     open:
       - url: https://${DOMAIN}/keycloak
 
@@ -77,3 +89,5 @@ commands:
   clean: |
     rm -rf $PWD/development/theme-live-dev/theme/p1-sso-live-dev
     devspace run crucible-common.clean
+  build-plugin: |
+    docker run -it --rm -v $(pwd):/app gradle:7.4.2-jdk11 bash -c 'cd /app && ./gradlew clean --build-cache assemble'
