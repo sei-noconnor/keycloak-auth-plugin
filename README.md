@@ -35,14 +35,34 @@ This will bootstrap a kind cluster named `crucible (kind-crucible)` with an ngin
 you will need to find instructions on how to import certificates based on your OS, on linux certificates are managed by the browsers. When you run the prep script above. an `ssl` folder is created at the root of this repository import the `root-ca.pem` into your certificate store 
 
 ### Development
-currently this repo is only supporting theme development and not java development
+Both plugin development and theme development are supported with this repo.
+#### Plugin
+To build the plugin run `devspace run build-plugin` then, create a `launch.json` file in the `.vscode` folder with the following configuration
 
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug (Attach)",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 8787
+    }
+  ]
+}
+```
+Hot Reloading is not supported in the current configuration, when changes are made to the Java source you will need to run `devspace run build-plugin`. The new plugin will automatically sync with the container and you can set breakpoints in the code.
+
+
+#### Theme
 1. symlink the crucible folder to theme-live-dev `ln -s $PWD/p1-keycloak-plugin/src/main/resources/theme/crucible $PWD/development/theme-live-dev/theme/p1-sso-live-dev` 
 1. `devspace dev`
 1. start editing files in the `./development/theme-live-dev/theme/p1-sso-live-dev`
 1. saving the files will automatically sync the theme, changes can be seen in realtime with a refresh
 
-### Building plugin image
+### Building plugin image (Container)
 1. `devspace build`
 2. `docker push <registry>/<image>:<tag>`
 
