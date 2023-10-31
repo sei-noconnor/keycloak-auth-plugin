@@ -30,6 +30,11 @@ images:
     buildKit: {}
       
 dependencies:
+  crucible-common:
+    git: https://github.com/sei-noconnor/crucible-common-devspace.git
+    branch: main
+    overwriteVars: true
+  #### Local Dependency dev ###
   # crucible-common:
   #   path: ../crucible-devspace
   #   overwriteVars: true
@@ -38,35 +43,70 @@ dev:
   keycloak-auth-plugin:
     imageSelector: docker.io/bitnami/keycloak:21.0.2-debian-11-r0
     container: keycloak
-    ports:
-    - port: "8787:8787"
-    env: 
+    command:
+    - "bash"
+    - "-c"
+    - "sleep 10 && /opt/bitnami/scripts/keycloak/setup.sh && /opt/bitnami/scripts/keycloak/run.sh"
+    env:
+    - name: BITNAMI_DEBUG
+      value: "true"
     - name: KEYCLOAK_EXTRA_ARGS
-      value: --spi-theme-welcome-theme=p1-sso-live-dev --spi-truststore-file-file=/opt/bitnami/keycloak/spi-certs/truststore.jks --spi-truststore-file-password=password --spi-truststore-file-hostname-verification-policy=ANY --spi-truststore-file-type=jks --spi-x509cert-lookup-provider=nginx --spi-x509cert-lookup-nginx-ssl-client-cert=ssl-client-cert --spi-x509cert-lookup-nginx-trust-proxy-verification=false --import-realm --debug
+      value: --spi-theme-welcome-theme=p1-sso-live-dev --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --spi-truststore-file-file=/opt/bitnami/keycloak/spi-certs/truststore.jks --spi-truststore-file-password=password --spi-truststore-file-hostname-verification-policy=ANY --spi-truststore-file-type=jks --spi-x509cert-lookup-provider=nginx --spi-x509cert-lookup-nginx-ssl-client-cert=ssl-client-cert --spi-x509cert-lookup-nginx-trust-proxy-verification=false --import-realm
     - name: KEYCLOAK_PRODUCTION
-      value: "false"
+      value: "true"
     - name: DEBUG_PORT
       value: "*:8787"
-    - name: DEBUG_MODE
-      value: "true"
-    
-        
+    - name: "KEYCLOAK_DATABASE_VENDOR"
+      value: "dev-file"
     
     sync:
       - path: "${DEVSPACE_WORKING_DIR}/development/theme-live-dev/theme/p1-sso-live-dev:/opt/bitnami/keycloak/themes/p1-sso-live-dev"
         waitInitialSync: true
         disableDownload: true
-        printLogs: true
       - path: "${DEVSPACE_WORKING_DIR}/build/libs/p1-keycloak-plugin-3.2.0.jar:/opt/bitnami/keycloak/providers/p1-keycloak-plugin-3.2.0.jar"
         disableDownload: true
         file: true
         printLogs: true
-        onUpload:
-          exec:
-            - command: |-
-                kc.sh build
-    open:
-      - url: https://${DOMAIN}/keycloak
+        # onUpload:
+        #   exec:
+        #     - command: /opt/bitnami/scripts/keycloak/setup.sh 
+        #     - command: /opt/bitnami/scripts/keycloak/run.sh
+
+    patches: 
+    - op: remove
+      path: spec.initContainers.name=plugin
+    - op: remove
+      path: spec.containers.name=keycloak.volumeMounts.name=plugin
+    - op: remove
+      path: spec.containers.name=keycloak.env.name=KC_DB
+    - op: remove
+      path: spec.containers.name=keycloak.env.name=KC_DB_USERNAME
+    - op: remove
+      path: spec.containers.name=keycloak.env.name=KC_DB_PASSWORD
+    - op: remove
+      path: spec.containers.name=keycloak.env.name=KC_DB_URL_DATABASE
+    - op: remove
+      path: spec.containers.name=keycloak.env.name=KC_DB__URL_PORT
+    - op: remove
+      path: spec.containers.name=keycloak.env.name=KC_DB_URL_HOST
+    - op: remove
+      path: spec.containers.name=keycloak.env.name=KEYCLOAK_DATABASE_HOST
+    - op: remove
+      path: spec.containers.name=keycloak.env.name=KEYCLOAK_DATABASE_PORT
+    - op: remove
+      path: spec.containers.name=keycloak.env.name=KEYCLOAK_DATABASE_USER
+    - op: remove
+      path: spec.containers.name=keycloak.env.name=KEYCLOAK_DATABASE_PASSWORD
+
+localRegistry:
+  enabled: true
+  name: registry
+  namespace: default
+  localbuild: false
+  image: registry:2.8.1
+  persistence:
+    enabled: true
+    size: 10Gi
 
 vars:
   DEVSPACE_WORKING_DIR: $(echo "$PWD")

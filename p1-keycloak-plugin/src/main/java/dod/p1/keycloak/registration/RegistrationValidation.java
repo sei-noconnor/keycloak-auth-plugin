@@ -60,10 +60,10 @@ public class RegistrationValidation extends RegistrationProfile {
 
     private static void bindRequiredActions(final UserModel user, final String x509Username) {
         // Default actions for all users
-        user.addRequiredAction(UserModel.RequiredAction.VERIFY_EMAIL);
+        //user.addRequiredAction(UserModel.RequiredAction.VERIFY_EMAIL);
 
         // Make GS-15 Matt and the Cyber Humans happy
-        user.addRequiredAction("TERMS_AND_CONDITIONS");
+        //user.addRequiredAction("TERMS_AND_CONDITION");
 
         if (x509Username == null) {
             // This user must configure MFA for their login
