@@ -63,7 +63,7 @@ dev:
       - path: "${DEVSPACE_WORKING_DIR}/development/theme-live-dev/theme/p1-sso-live-dev:/opt/bitnami/keycloak/themes/p1-sso-live-dev"
         waitInitialSync: true
         disableDownload: true
-      - path: "${DEVSPACE_WORKING_DIR}/build/libs/p1-keycloak-plugin-3.2.0.jar:/opt/bitnami/keycloak/providers/p1-keycloak-plugin-3.2.0.jar"
+      - path: "${DEVSPACE_WORKING_DIR}/build/libs/p1-keycloak-plugin-3.2.1.jar:/opt/bitnami/keycloak/providers/p1-keycloak-plugin-3.2.1.jar"
         disableDownload: true
         file: true
         printLogs: true
