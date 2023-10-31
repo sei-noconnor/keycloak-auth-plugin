@@ -43,7 +43,7 @@
 
         </div>
 
-        <div class="row">
+        <div <#if cacIdentity??>style="display: none;"</#if> class="row">
 
             <div class="col-lg-6 form-group ${messagesPerField.printIfExists('user.attributes.affiliation','has-error')}" <#if cacIdentity??> style="display: none" </#if>>
                 <label for="user.attributes.affiliation" class="form-label">Affiliation</label>
@@ -69,7 +69,7 @@
 
         </div>
 
-        <div class="form-group ${messagesPerField.printIfExists('user.attributes.organization','has-error')}" <#if cacIdentity??> style="display: none" </#if>>
+        <div class="form-group ${messagesPerField.printIfExists('user.attributes.organization','has-error')}" <#if cacIdentity??>style="display: none;"</#if>>
             <label for="user.attributes.organization" class="form-label">Unit, Organization or Company Name</label>
             <input id="user.attributes.organization" class="form-control" name="user.attributes.organization" type="text"
                     value="${(account.attributes.organization!'')}" />
@@ -91,7 +91,7 @@
 
         <div class="form-group ${messagesPerField.printIfExists('email','has-error')}">
             <label for="email" class="form-label">${msg("email")}</label>
-            <input id="email" class="form-control" name="email" type="text"
+            <input <#if cacIdentity??> readonly </#if> id="email" class="form-control" name="email" type="text"
                     value="${(account.email!'')}" />
             <#if messagesPerField.existsError('email')>
                 <span class="message-details" aria-live="polite">${kcSanitize(messagesPerField.get('email'))?no_esc}</span>

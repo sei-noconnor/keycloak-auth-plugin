@@ -85,7 +85,7 @@
 
             <div class="form-group ${messagesPerField.printIfExists('email','has-error')}">
                 <label for="email" class="form-label">${msg("email")}</label>
-                <input id="email" class="form-control" name="email" type="text"
+                <input <#if cacIdentity??> readonly </#if> id="email" class="form-control" name="email" type="text"
                         value="${(register.formData.email!'')}" autocomplete="email"/>
                 <#if messagesPerField.existsError('email')>
                     <span class="message-details" aria-live="polite">${kcSanitize(messagesPerField.get('email'))?no_esc}</span>
@@ -160,6 +160,11 @@
     //document.getElementById('user.attributes.rank').value = "${(register.formData['user.attributes.rank']!'')}";
 
     (function () {
+        function capitalize(s) {
+          let lower = s.toLowerCase();
+          return s.charAt(0).toUpperCase() + lower.slice(1);
+        }
+
         const threshold = 50;
         let count = 0;
         let complete = false;
@@ -170,13 +175,15 @@
           let lastName = safeCacIdentity.split('.')[0];
           let firstName = safeCacIdentity.split('.')[1];
           // Remove any special characters.
-          firstName = firstName.replace(/[^\w\s]/gi, '');
-          lastName = lastName.replace(/[^\w\s]/gi, '');
+          firstName = capitalize(firstName.replace(/[^\w\s]/gi, ''));
+          lastName = capitalize(lastName.replace(/[^\w\s]/gi, ''));
           // Set form fields
           regLink = document.getElementById('registration-link');
           regLink.classList.add('display-none');
           document.getElementById('firstName').value = firstName;
           document.getElementById('lastName').value = lastName;
+          document.getElementById('email').value = firstName + "." + lastName + "@fortress.sei.cmu.edu"
+
           if (!${(realm.registrationEmailAsUsername?c)}) {
           document.getElementById('username').value = firstName + "." + lastName;
         }
@@ -196,7 +203,7 @@
 
         const confidence = document.getElementById('confidence');
         const footer = document.getElementById('footer-text');
-
+        
         function tracker() {
             if (complete) {
                 return;
