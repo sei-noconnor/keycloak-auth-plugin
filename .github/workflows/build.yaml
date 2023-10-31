@@ -21,12 +21,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      
+      - name: Declare Variables
+        shell: bash
+        run: |
+          echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
+          echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> "$GITHUB_ENV"
+        
+      - name: Display Variables
+        shell: bash
+        run: |
+            echo "Sha: ${{ env.sha_short }}"
+            echo "branch: ${{ env.branch }}"
 
       - name: Prepare
         id: prep
         run: |
           DOCKER_IMAGE=cmusei/keycloak-auth-plugin
-          VERSION=development
+          VERSION=${{ env.branch }}-${{ env.sha_short }}
           if [[ ! -z "${{ github.event.inputs.tagName }}" ]]; then
             VERSION=${{ github.event.inputs.tagName }}
             TAGS="${DOCKER_IMAGE}:${VERSION}"
