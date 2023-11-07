@@ -47,7 +47,7 @@ jobs:
             MAJORMINORVERSION=$(echo $VERSION | grep -oP '(\d+)\.(\d+)')
             TAGS="${DOCKER_IMAGE}:${VERSION},${DOCKER_IMAGE}:${MAJORMINORVERSION}"
           elif [[ $GITHUB_REF == refs/heads/* ]]; then
-            VERSION=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's#/+#-#g')
+            VERSION=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's#/+#-#g')-${{ env.sha_short }}
             TAGS="${DOCKER_IMAGE}:${VERSION}"
           fi
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
