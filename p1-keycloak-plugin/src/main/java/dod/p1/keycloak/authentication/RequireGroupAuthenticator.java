@@ -109,6 +109,8 @@ public class RequireGroupAuthenticator implements Authenticator {
         //TODO: Check if terms and conditions attribute exists first
         //user.addRequiredAction("terms_and_conditions");
         user.removeRequiredAction("TERMS_AND_CONDITIONS");
+        user.removeRequiredAction("terms_and_conditions");
+        user.removeRequiredAction("VERIFY_EMAIL");
         context.success();
     }
 
