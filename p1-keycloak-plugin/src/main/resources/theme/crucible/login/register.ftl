@@ -85,7 +85,7 @@
 
             <div class="form-group ${messagesPerField.printIfExists('email','has-error')}">
                 <label for="email" class="form-label">${msg("email")}</label>
-                <input <#if cacIdentity??> readonly </#if> id="email" class="form-control" name="email" type="text"
+                <input id="email" class="form-control" name="email" type="text"
                         value="${(register.formData.email!'')}" autocomplete="email"/>
                 <#if messagesPerField.existsError('email')>
                     <span class="message-details" aria-live="polite">${kcSanitize(messagesPerField.get('email'))?no_esc}</span>
@@ -182,7 +182,7 @@
           regLink.classList.add('display-none');
           document.getElementById('firstName').value = firstName;
           document.getElementById('lastName').value = lastName;
-          document.getElementById('email').value = firstName + "." + lastName + "@fortress.sei.cmu.edu"
+          document.getElementById('email').value = firstName.trim() + "." + lastName.trim() + "@fortress.sei.cmu.edu"
 
           if (!${(realm.registrationEmailAsUsername?c)}) {
           document.getElementById('username').value = firstName + "." + lastName;
