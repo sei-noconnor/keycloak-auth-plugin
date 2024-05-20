@@ -1,9 +1,8 @@
 <#import "template.ftl" as layout>
 <@layout.registrationLayout displayMessage=true displayInfo=realm.password && realm.registrationAllowed && !registrationDisabled??; section>
     <#if section = "form">
-        <#if realm.password>
-            Form Login is disabled, Please register a CAC or softcert.
-            <#--  <form onsubmit="login.disabled=true;return true;" action="${url.loginAction}" method="post">
+        <#if realm.loginWithEmailAllowed>
+            <form onsubmit="login.disabled=true;return true;" action="${url.loginAction}" method="post">
                 <div class="form-group">
                     <label class="form-label" for="username">
                         <#if !realm.loginWithEmailAllowed>${msg("username")}
@@ -33,14 +32,16 @@
                             name="login" id="kc-login" type="submit" value="${msg("doLogIn")}"/>
                 </div>
 
-            </form>  -->
+            </form>
+        <#else>
+            Form Login is disabled, Please register a CAC or softcert.
         </#if>
-        <!--
+        
         <div class="footer-text">
             No account? <a href="${url.registrationUrl}">Click here</a> to register now.<br>
             <a id="helpdesk" href="mailto:info@sei.cmu.edu">email us</a>
         </div>
-        -->
+        
     </#if>
 
 </@layout.registrationLayout>
