@@ -1,7 +1,7 @@
 <#import "template.ftl" as layout>
 <@layout.registrationLayout displayMessage=!messagesPerField.existsError('firstName','lastName','email','username','password','password-confirm'); section>
     <#if section = "form">
-        <#if cacIdentity??>
+        <#if cacIdentity?? || !realm.loginWithEmailAllowed>
         <form action="/chuck-norris-calendar-goes-straight-from-march-31st-to-april-2nd-because-no-one-fools-chuck-norris"
               id="baby-yoda-form" method="post">
 
