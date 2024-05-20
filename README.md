@@ -20,10 +20,12 @@ its best to install [brew](https://brew.sh) on your os and install the dependenc
 - `yq`
 - `devspace-cli`
 - `openssl`
+- gettext (envsubst)
 
 ### Bootstrap 
 1. `devspace run prep` - Creates SSL certificates
 1. `devspace run bootstrap` - initializes the Kind cluster
+
 
 This will bootstrap a kind cluster named `crucible (kind-crucible)` with an nginx ingress.
 
@@ -36,6 +38,8 @@ you will need to find instructions on how to import certificates based on your O
 
 ### Development
 Both plugin development and theme development are supported with this repo.
+to start developing run 
+1. `devspace dev` - provision the kind cluster with dependencies.
 #### Plugin
 To build the plugin run `devspace run build-plugin` then, create a `launch.json` file in the `.vscode` folder with the following configuration
 
