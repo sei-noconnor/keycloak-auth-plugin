@@ -165,6 +165,10 @@
           return s.charAt(0).toUpperCase() + lower.slice(1);
         }
 
+        function removeSpaces(s) {
+          return s.trim().replace(/\s/g, "");
+        }
+
         const threshold = 50;
         let count = 0;
         let complete = false;
@@ -182,10 +186,10 @@
           regLink.classList.add('display-none');
           document.getElementById('firstName').value = firstName;
           document.getElementById('lastName').value = lastName;
-          document.getElementById('email').value = firstName.trim() + "." + lastName.trim() + "@fortress.sei.cmu.edu"
+          document.getElementById('email').value = removeSpaces(firstName) + "." + removeSpaces(lastName) + "@fortress.sei.cmu.edu"
 
           if (!${(realm.registrationEmailAsUsername?c)}) {
-          document.getElementById('username').value = firstName + "." + lastName;
+          document.getElementById('username').value = removeSpaces(firstName) + "." + removeSpaces(lastName);
         }
         <#else>
           console.log('CACIdentity does NOT have content')
