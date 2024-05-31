@@ -1,6 +1,11 @@
 # Keycloak Crucible Auth Plugin
 This auth plugin enables DoD CAC authentication in keycloak and is based off the Platform One keycloak auth plugin. This plugin is provided by the SEI to work with SEI applications requiring CAC authentication.
 
+## Table of contents
+1. [Building the plugin](#building-the-plugin)
+1. [Quickstart - Devspace](#quickstart---devspace)
+1. [Quickstart - Docker](#quickstart---docker)
+
 ## Building the plugin. 
 To build a docker image of the plugin run the command at the root of the repo 
 ```
